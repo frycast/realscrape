@@ -11,6 +11,8 @@
 #' @param B Number of boards (i.e., pages of ads) to scape per suburb.
 #' @param P Number of ad pages per board (determined by inspecting the
 #' AU House Prices website).
+#' @param noisy Logical. If \code{TRUE} then the function prints
+#' a message each time a suburb is completed.
 #'
 #' @return
 #' A tibble of house sales data.
@@ -24,7 +26,7 @@
 #' data <- scrape_sbc( STA3LM_suburbs_by_council, B = 1, P = 1 )
 #' data_clean <- tidyr::drop_na( data )
 #'
-scrape_sbc <- function( sbc, B = 1, P = 12 ) {
+scrape_sbc <- function( sbc, B = 1, P = 12, noisy = TRUE ) {
 
   data <- data.frame()
 
@@ -41,6 +43,11 @@ scrape_sbc <- function( sbc, B = 1, P = 12 ) {
 
       data <- rbind(data, sub_data)
     }
+
+    if ( noisy ) {
+      cat(paste0("Suburb ",
+        gsub('\\+',' ', suburb[1]),
+        " scrape complete..."),"\n")}
   }
 
   return(data)

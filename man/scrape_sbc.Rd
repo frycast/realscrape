@@ -4,7 +4,7 @@
 \alias{scrape_sbc}
 \title{scrape_sbc}
 \usage{
-scrape_sbc(sbc, B = 1, P = 1)
+scrape_sbc(sbc, B = 1, P = 12, noisy = TRUE)
 }
 \arguments{
 \item{sbc}{A list of suburbs by council
@@ -15,9 +15,12 @@ in the same format as the example list
 
 \item{P}{Number of ad pages per board (determined by inspecting the
 AU House Prices website).}
+
+\item{noisy}{Logical. If \code{TRUE} then the function prints
+a message each time a suburb is completed.}
 }
 \value{
-A tibble of house sales data
+A tibble of house sales data.
 }
 \description{
 Scrape house sales data from a list of suburbs by council.
@@ -28,6 +31,9 @@ calls \code{\link[realscrape]{scrape_suburb}}.
 }
 \examples{
 View( STA3LM_suburbs_by_council )
-data <- scrape_sbc( STA3LM_suburbs_by_council )
+
+# Normally we would set P = 12 (12 ad pages per board)
+data <- scrape_sbc( STA3LM_suburbs_by_council, B = 1, P = 1 )
+data_clean <- tidyr::drop_na( data )
 
 }

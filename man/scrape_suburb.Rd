@@ -4,20 +4,20 @@
 \alias{scrape_suburb}
 \title{scrape_suburb}
 \usage{
-scrape_suburb(suburb, B = 1, P = 1)
+scrape_suburb(suburb, postcode, B = 1, P = 12)
 }
 \arguments{
 \item{suburb}{A character string giving the suburb name
 with empty spaces replaced with '+', and first letter of each
 word capitalised.}
 
+\item{postcode}{A character string giving the 4 digit suburb
+postcode.}
+
 \item{B}{Number of boards (i.e., pages of ads) to scape per suburb.}
 
 \item{P}{Number of ad pages per board (determined by inspecting the
 AU House Prices website).}
-
-\item{postcode}{A character string giving the 4 digit suburb
-postcode.}
 }
 \value{
 A tibble containing house sales data with missing values
@@ -27,7 +27,9 @@ represented by \code{NA}.
 Scrape house sales data from a suburb.
 }
 \examples{
-data <- scrape_suburb( suburb = "Bayswater+North", postcode = "3153" )
+
+# Normally we would set P = 12 (12 ad pages per board)
+data <- scrape_suburb( suburb = "Bayswater+North", postcode = "3153", P = 1 )
 
 
 }
