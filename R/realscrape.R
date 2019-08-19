@@ -121,9 +121,10 @@ scrape_suburb <- function( suburb, postcode, B = 1, P = 12 ) {
       get_page_urls(P)
 
     for ( j in 1:P ) {
-      page     <- read_html(page_urls[j])
+      if ( !is.na( page_urls[j] ) ) {
 
-      if ( !is.na(page) ) {
+        page     <- read_html(page_urls[j])
+
         stations <- get_stations(page)
         schools  <- get_schools(page)
         medians  <- get_medians(page)
