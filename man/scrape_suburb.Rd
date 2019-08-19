@@ -7,42 +7,27 @@
 scrape_suburb(suburb, B = 1, P = 1)
 }
 \arguments{
-\item{suburb}{A vector whose first element is the suburb name
-with empty spaces replaced with '+' and first letter of each
-word capitalised. The second element is the suburb postcode.}
+\item{suburb}{A character string giving the suburb name
+with empty spaces replaced with '+', and first letter of each
+word capitalised.}
 
 \item{B}{Number of boards (i.e., pages of ads) to scape per suburb.}
 
 \item{P}{Number of ad pages per board (determined by inspecting the
 AU House Prices website).}
+
+\item{postcode}{A character string giving the 4 digit suburb
+postcode.}
 }
 \value{
 A tibble containing house sales data with missing values
 represented by \code{NA}.
 }
 \description{
-scrape_suburb
+Scrape house sales data from a suburb.
 }
 \examples{
-
-suburbs_by_council <- list(
-  MAROONDAH = list(
-    c("Bayswater+North",      "3153"),
-    c("Croydon"        ,      "3136")),
-   KNOX = list(
-    c("Bayswater"           , "3153"),
-    c("Boronia"             , "3155")))
-
-data <- data.frame()
-
-for ( council in names(suburbs_by_council)  ) {
-  for ( suburb in suburbs_by_council[[council]] ) {
-
-    data <- suburb \%>\%
-      scrape_suburb() \%>\%
-      rbind(data)
-  }
-}
+data <- scrape_suburb( suburb = "Bayswater+North", postcode = "3153" )
 
 
 }

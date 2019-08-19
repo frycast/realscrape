@@ -1,8 +1,61 @@
+#' scrape_sbc
+#'
+#' Scrape house sales data from a list of suburbs by council.
+#'
+#' This function relies on a loop which repeatedly
+#' calls \code{\link[realscrape]{scrape_suburb}}.
+#'
+#' @param sbc A list of suburbs by council
+#' in the same format as the example list
+#' \code{STA3LM_suburbs_by_council}
+#' @param B Number of boards (i.e., pages of ads) to scape per suburb.
+#' @param P Number of ad pages per board (determined by inspecting the
+#' AU House Prices website).
+#'
+#' @return
+#' A tibble of house sales data.
+#'
+#' @export
+#'
+#' @examples
+#' View( STA3LM_suburbs_by_council )
+#'
+#' # Normally we would set P = 12 (12 ad pages per board)
+#' data <- scrape_sbc( STA3LM_suburbs_by_council, B = 1, P = 1 )
+#' data_clean <- tidyr::drop_na( data )
+#'
+scrape_sbc <- function( sbc, B = 1, P = 12 ) {
+
+  data <- data.frame()
+
+  for ( council in names( sbc )  ) {
+
+    for ( suburb in sbc[[ council ]] ) {
+
+      pars <- list(suburb = suburb[1], postcode = suburb[2], B = B, P = P)
+      sub_data <- scrape_suburb(pars)
+      sub_data$suburb   <- suburb[1]
+      sub_data$postcode <- suburb[2]
+      sub_data$council  <- council
+
+      data <- rbind(data, sub_data)
+    }
+  }
+
+  return(data)
+}
+
+
+
 #' scrape_suburb
 #'
-#' @param suburb A vector whose first element is the suburb name
-#' with empty spaces replaced with '+' and first letter of each
-#' word capitalised. The second element is the suburb postcode.
+#' Scrape house sales data from a suburb.
+#'
+#' @param suburb A character string giving the suburb name
+#' with empty spaces replaced with '+', and first letter of each
+#' word capitalised.
+#' @param postcode A character string giving the 4 digit suburb
+#' postcode.
 #' @param B Number of boards (i.e., pages of ads) to scape per suburb.
 #' @param P Number of ad pages per board (determined by inspecting the
 #' AU House Prices website).
@@ -15,27 +68,11 @@
 #'
 #' @examples
 #'
-#' suburbs_by_council <- list(
-#'   MAROONDAH = list(
-#'     c("Bayswater+North",      "3153"),
-#'     c("Croydon"        ,      "3136")),
-#'    KNOX = list(
-#'     c("Bayswater"           , "3153"),
-#'     c("Boronia"             , "3155")))
-#'
-#' data <- data.frame()
-#'
-#' for ( council in names(suburbs_by_council)  ) {
-#'   for ( suburb in suburbs_by_council[[council]] ) {
-#'
-#'     data <- suburb %>%
-#'       scrape_suburb() %>%
-#'       rbind(data)
-#'   }
-#' }
+#' # Normally we would set P = 12 (12 ad pages per board)
+#' data <- scrape_suburb( suburb = "Bayswater+North", postcode = "3153", P = 1 )
 #'
 #'
-scrape_suburb <- function( suburb, B = 1, P = 1 ) {
+scrape_suburb <- function( suburb, B = 1, P = 12 ) {
 
   board_urls <- paste0("https://www.auhouseprices.com/sold/list/VIC/",
                        suburb[2], "/", suburb[1], "/", 1:B, "/")
