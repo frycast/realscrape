@@ -32,8 +32,9 @@ scrape_sbc <- function( sbc, B = 1, P = 12 ) {
 
     for ( suburb in sbc[[ council ]] ) {
 
-      pars <- list(suburb = suburb[1], postcode = suburb[2], B = B, P = P)
-      sub_data <- scrape_suburb(pars)
+      sub_data <- scrape_suburb( suburb = suburb[1],
+                                 postcode = suburb[2],
+                                 B = B, P = P )
       sub_data$suburb   <- suburb[1]
       sub_data$postcode <- suburb[2]
       sub_data$council  <- council
@@ -72,10 +73,13 @@ scrape_sbc <- function( sbc, B = 1, P = 12 ) {
 #' data <- scrape_suburb( suburb = "Bayswater+North", postcode = "3153", P = 1 )
 #'
 #'
-scrape_suburb <- function( suburb, B = 1, P = 12 ) {
+scrape_suburb <- function( suburb, postcode, B = 1, P = 12 ) {
+
+  assertthat::assert_that( P >= 1 )
+  assertthat::assert_that( P <= 12 )
 
   board_urls <- paste0("https://www.auhouseprices.com/sold/list/VIC/",
-                       suburb[2], "/", suburb[1], "/", 1:B, "/")
+                       postcode, "/", suburb, "/", 1:B, "/")
 
   data <- data.frame()
 
@@ -100,7 +104,6 @@ scrape_suburb <- function( suburb, B = 1, P = 12 ) {
 
   for ( i in 1:B ) {
     page_urls <- board_urls[i] %>%
-      read_html() %>%
       get_page_urls(P)
 
     for ( j in 1:P ) {
@@ -108,7 +111,7 @@ scrape_suburb <- function( suburb, B = 1, P = 12 ) {
       stations <- get_stations(page)
       schools  <- get_schools(page)
       medians  <- get_medians(page)
-      ls$address[j] <- get_address(page, suburb[1])
+      ls$address[j] <- get_address(page, suburb)
       ls$price[j]   <- get_price(page)
       ls$type[j]    <- get_type(page)
       ls$bed[j]     <- get_bed(page)
@@ -140,6 +143,7 @@ scrape_suburb <- function( suburb, B = 1, P = 12 ) {
 # Extract all the urls for ad pages on this board
 get_page_urls <- function(board, P) {
   board %>%
+    read_html() %>%
     html_nodes('a') %>%
     html_attr('href') %>%
     str_subset('https://www.auhouseprices.com/sold/view/VIC') %>%

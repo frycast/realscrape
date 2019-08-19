@@ -8,6 +8,7 @@ Authors@R: c(person("Daniel", "Fryer",
 Description: A very basic rvest wrapper for scraping Victorian house 
     sales data from the AU House Prices website auhouseprices.com
 Depends: rvest (>= 0.3.4),
+         assertthat,
          stringr,
          tibble,
          tidyr,
