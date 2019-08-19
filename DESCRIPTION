@@ -1,11 +1,13 @@
 Package: realscrape
-Title: Scrape house sales data from AU House Prices website
+Title: Scrape Victorian house sales data AUHousePrices.com
 Version: 0.0.0.9000
 Authors@R: c(person("Daniel", "Fryer", 
                      role = c("aut", "cre"), 
                      email = "daniel-fryer@live.com.au",
                      comment = c(ORCID = "0000-0001-6032-0522")))
-Description: Scrape house sales data from AU House Prices website
+Description: A very basic rvest wrapper for scraping Victorian 
+house sales data from the AU House Prices 
+website https://www.auhouseprices.com/
 Depends: rvest (>= 0.3.4),
          stringr,
          tibble,
