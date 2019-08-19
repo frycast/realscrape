@@ -42,12 +42,19 @@ scrape_sbc <- function( sbc, B = 1, P = 12, noisy = TRUE ) {
       sub_data$council  <- council
 
       data <- rbind(data, sub_data)
+
+      if ( noisy ) {
+        cat(paste0("Suburb ",
+                   gsub('\\+',' ', suburb[1]),
+                   " scrape complete..."),"\n")}
     }
 
     if ( noisy ) {
-      cat(paste0("Suburb ",
-        gsub('\\+',' ', suburb[1]),
-        " scrape complete..."),"\n")}
+      cat("*********************************\n")
+      cat(paste0("Council ", council,
+                 " scrape complete..."),"\n")}
+      cat("*********************************\n\n")
+
   }
 
   return(data)
@@ -115,25 +122,29 @@ scrape_suburb <- function( suburb, postcode, B = 1, P = 12 ) {
 
     for ( j in 1:P ) {
       page     <- read_html(page_urls[j])
-      stations <- get_stations(page)
-      schools  <- get_schools(page)
-      medians  <- get_medians(page)
-      ls$address[j] <- get_address(page, suburb)
-      ls$price[j]   <- get_price(page)
-      ls$type[j]    <- get_type(page)
-      ls$bed[j]     <- get_bed(page)
-      ls$bath[j]    <- get_bath(page)
-      ls$car[j]     <- get_car(page)
-      ls$CBD[j]     <- get_CBD(page)
-      ls$date[j]    <- get_date(page)
-      ls$agency[j]  <- get_agency(page)
-      ls$images[j]  <- get_images(page)
-      ls$land[j]    <- get_land(page)
-      ls$med_h[j]   <- medians[1]
-      ls$med_u[j]   <- medians[2]
-      ls$school[j]  <- schools[1]
-      ls$station[j] <- stations[1]
 
+      if ( !is.na(page) ) {
+        stations <- get_stations(page)
+        schools  <- get_schools(page)
+        medians  <- get_medians(page)
+        ls$address[j] <- get_address(page, suburb)
+        ls$price[j]   <- get_price(page)
+        ls$type[j]    <- get_type(page)
+        ls$bed[j]     <- get_bed(page)
+        ls$bath[j]    <- get_bath(page)
+        ls$car[j]     <- get_car(page)
+        ls$CBD[j]     <- get_CBD(page)
+        ls$date[j]    <- get_date(page)
+        ls$agency[j]  <- get_agency(page)
+        ls$images[j]  <- get_images(page)
+        ls$land[j]    <- get_land(page)
+        ls$med_h[j]   <- medians[1]
+        ls$med_u[j]   <- medians[2]
+        ls$school[j]  <- schools[1]
+        ls$station[j] <- stations[1]
+      } else {
+        ls$address[j] <- "DUD PAGE"
+      }
     }
 
     this_data <- data.frame(ls, stringsAsFactors = F)
