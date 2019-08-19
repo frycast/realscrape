@@ -1,4 +1,4 @@
-# realscrape
+# realscrape R package
 rvest wrapper for scraping sales data from [AU House Prices website](https://www.auhouseprices.com/) 
 
 First install realscrape
