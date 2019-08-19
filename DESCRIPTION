@@ -1,0 +1,17 @@
+Package: realscrape
+Title: Scrape house sales data from AU House Prices website
+Version: 0.0.0.9000
+Authors@R: c(person("Daniel", "Fryer", 
+                     role = c("aut", "cre"), 
+                     email = "daniel-fryer@live.com.au",
+                     comment = c(ORCID = "0000-0001-6032-0522")))
+Description: Scrape house sales data from AU House Prices website
+Depends: rvest (>= 0.3.4),
+         stringr,
+         tibble,
+         tidyr,
+         dplyr
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
