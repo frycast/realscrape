@@ -199,7 +199,7 @@ get_price <- function(page) {
 get_type_bed_bath_car <- function(page) {
   page %>%
     quick_text('li') %>%
-    .[34]  %>%
+    .[35]  %>%
     strsplit(split = " ") %>%
     unlist() %>%
     .[.!=""]
